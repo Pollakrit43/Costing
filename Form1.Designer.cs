@@ -30,6 +30,14 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.dgvColumns = new System.Windows.Forms.DataGridView();
+            this.btnStart = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.cboStyle = new System.Windows.Forms.ComboBox();
+            this.cboCustomer = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.Style = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Customer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.F1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -44,12 +52,6 @@
             this.F10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.F11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.F12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.btnStart = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.cboStyle = new System.Windows.Forms.ComboBox();
-            this.cboCustomer = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgvColumns)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,22 +76,103 @@
             this.F10,
             this.F11,
             this.F12});
-            this.dgvColumns.Location = new System.Drawing.Point(12, 70);
+            this.dgvColumns.Location = new System.Drawing.Point(12, 97);
             this.dgvColumns.Name = "dgvColumns";
             this.dgvColumns.Size = new System.Drawing.Size(776, 267);
             this.dgvColumns.TabIndex = 0;
+            this.dgvColumns.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvColumns_CellClick);
+            this.dgvColumns.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvColumns_CellMouseDown);
+            this.dgvColumns.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dgvColumns_RowPostPaint);
+            // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(321, 30);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.TabIndex = 1;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(669, 28);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 2;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // cboStyle
+            // 
+            this.cboStyle.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
+            this.cboStyle.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.cboStyle.FormattingEnabled = true;
+            this.cboStyle.Location = new System.Drawing.Point(13, 30);
+            this.cboStyle.Name = "cboStyle";
+            this.cboStyle.Size = new System.Drawing.Size(121, 21);
+            this.cboStyle.TabIndex = 3;
+            this.cboStyle.SelectedIndexChanged += new System.EventHandler(this.cboStyle_SelectedIndexChanged);
+            // 
+            // cboCustomer
+            // 
+            this.cboCustomer.FormattingEnabled = true;
+            this.cboCustomer.Location = new System.Drawing.Point(167, 30);
+            this.cboCustomer.Name = "cboCustomer";
+            this.cboCustomer.Size = new System.Drawing.Size(121, 21);
+            this.cboCustomer.TabIndex = 4;
+            this.cboCustomer.SelectedIndexChanged += new System.EventHandler(this.cboCustomer_SelectedIndexChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(30, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Style";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(164, 9);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Customer";
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(423, 29);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(75, 23);
+            this.btnReset.TabIndex = 7;
+            this.btnReset.Text = "Reset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(12, 71);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(776, 20);
+            this.textBox1.TabIndex = 8;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // Style
             // 
             this.Style.HeaderText = "Style";
             this.Style.Name = "Style";
             this.Style.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Style.Visible = false;
             // 
             // Customer
             // 
             this.Customer.HeaderText = "Customer";
             this.Customer.Name = "Customer";
             this.Customer.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.Customer.Visible = false;
             // 
             // F1
             // 
@@ -163,70 +246,14 @@
             this.F12.Name = "F12";
             this.F12.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
-            // btnStart
-            // 
-            this.btnStart.Location = new System.Drawing.Point(321, 30);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
-            this.btnStart.TabIndex = 1;
-            this.btnStart.Text = "Start";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(669, 28);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 2;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // cboStyle
-            // 
-            this.cboStyle.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
-            this.cboStyle.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.cboStyle.FormattingEnabled = true;
-            this.cboStyle.Location = new System.Drawing.Point(13, 30);
-            this.cboStyle.Name = "cboStyle";
-            this.cboStyle.Size = new System.Drawing.Size(121, 21);
-            this.cboStyle.TabIndex = 3;
-            this.cboStyle.SelectedIndexChanged += new System.EventHandler(this.cboStyle_SelectedIndexChanged);
-            // 
-            // cboCustomer
-            // 
-            this.cboCustomer.FormattingEnabled = true;
-            this.cboCustomer.Location = new System.Drawing.Point(167, 30);
-            this.cboCustomer.Name = "cboCustomer";
-            this.cboCustomer.Size = new System.Drawing.Size(121, 21);
-            this.cboCustomer.TabIndex = 4;
-            this.cboCustomer.SelectedIndexChanged += new System.EventHandler(this.cboCustomer_SelectedIndexChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(30, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Style";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(164, 9);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Customer";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.RoyalBlue;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.btnReset);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cboCustomer);
@@ -247,6 +274,14 @@
         #endregion
 
         private System.Windows.Forms.DataGridView dgvColumns;
+        private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.ComboBox cboStyle;
+        private System.Windows.Forms.ComboBox cboCustomer;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnReset;
+        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Style;
         private System.Windows.Forms.DataGridViewTextBoxColumn Customer;
         private System.Windows.Forms.DataGridViewTextBoxColumn F1;
@@ -261,12 +296,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn F10;
         private System.Windows.Forms.DataGridViewTextBoxColumn F11;
         private System.Windows.Forms.DataGridViewTextBoxColumn F12;
-        private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.ComboBox cboStyle;
-        private System.Windows.Forms.ComboBox cboCustomer;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
     }
 }
 

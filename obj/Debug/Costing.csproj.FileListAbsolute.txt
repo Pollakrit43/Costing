@@ -8,3 +8,8 @@ E:\Work\Project C#\Costing\obj\Debug\Costing.csproj.GenerateResource.cache
 E:\Work\Project C#\Costing\obj\Debug\Costing.csproj.CoreCompileInputs.cache
 E:\Work\Project C#\Costing\obj\Debug\Costing.exe
 E:\Work\Project C#\Costing\obj\Debug\Costing.pdb
+E:\Work\Project C#\Costing\bin\Debug\Antlr3.Runtime.dll
+E:\Work\Project C#\Costing\bin\Debug\DynamicExpresso.Core.dll
+E:\Work\Project C#\Costing\bin\Debug\ExpressionEvaluator.dll
+E:\Work\Project C#\Costing\bin\Debug\Antlr3.Runtime.pdb
+E:\Work\Project C#\Costing\obj\Debug\Costing.csproj.CopyComplete

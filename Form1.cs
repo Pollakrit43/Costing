@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Costing
 {
@@ -21,7 +19,7 @@ namespace Costing
             InitializeComponent();
             PopulateComboBox();
             // Call method to populate ComboBox when the form loads
-
+            dgvColumns.CellMouseDown += dgvColumns_CellMouseDown;
 
             //cboStyle.SelectedIndexChanged += cboStyle_SelectedIndexChanged; // Subscribe to SelectedIndexChanged event
             //cboCustomer.SelectedIndexChanged += cboCustomer_SelectedIndexChanged; // Subscribe to SelectedIndexChanged even
@@ -32,6 +30,14 @@ namespace Costing
         private void Form1_Load(object sender, EventArgs e)
         {
             //object[] rowData1 = new object[] { " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " " };
+
+            dgvColumns.RowHeadersVisible = true;
+
+            // Set RowHeadersWidthSizeMode to enable automatic resizing
+            dgvColumns.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+
+            // Handle the RowPostPaint event to draw row numbers
+            dgvColumns.RowPostPaint += dgvColumns_RowPostPaint;
 
         }
 
@@ -46,17 +52,31 @@ namespace Costing
             dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "SEASON", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
 
             DataGridViewRow fabricRow1 = new DataGridViewRow();
-            fabricRow1.CreateCells(dgvColumns, selectedStyle, selectedCustomer, "FABRIC", "CODE", "", "", "", "", "", "", "", "", "UNIT", "CIF BKK", "CONSUMPTION/PC", "AMOUNT/USD");
+            fabricRow1.CreateCells(dgvColumns, selectedStyle, selectedCustomer, "FABRIC", "CODE", "", "", "", "", "", "", "UNIT", "CIF BKK", "CONSUMPTION/PC", "AMOUNT/USD");
 
-            // Set all cells in fabricRow1 as read-only
+
             for (int i = 0; i < fabricRow1.Cells.Count; i++)
             {
                 fabricRow1.Cells[i].ReadOnly = true;
             }
-
-            // Add fabricRow1 to the DataGridView
             dgvColumns.Rows.Add(fabricRow1);
 
+            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "A) BODY", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "B) POCKET LINING", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "C) NECK BINDING", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+
+
+
+            DataGridViewRow fabricRow2 = new DataGridViewRow();
+            fabricRow2.CreateCells(dgvColumns, selectedStyle, selectedCustomer, "TRIMS", "CODE", "PLACEMENT", "", "", "", "", "", "", "UNIT/PC", "QUANTITY", "AMOUNT/USD");
+
+
+            for (int i = 0; i < fabricRow2.Cells.Count; i++)
+            {
+                fabricRow2.Cells[i].ReadOnly = true;
+            }
+
+            dgvColumns.Rows.Add(fabricRow2);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -83,7 +103,7 @@ namespace Costing
 
                 SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
 
-                // Add parameters to the insert command
+
                 insertCommand.Parameters.Add("@RowValue", SqlDbType.Int).Value = newRowValue;
                 insertCommand.Parameters.Add("@Style", SqlDbType.VarChar);
                 insertCommand.Parameters.Add("@Customer", SqlDbType.VarChar);
@@ -100,13 +120,13 @@ namespace Costing
                 insertCommand.Parameters.Add("@F11", SqlDbType.VarChar);
                 insertCommand.Parameters.Add("@F12", SqlDbType.VarChar);
 
-                // Track if any insert operation failed
+
                 bool success = true;
 
-                // Iterate through DataGridView rows and execute the insert command for each row
+
                 foreach (DataGridViewRow row in dgvColumns.Rows)
                 {
-                    // Check if the cell's value is not null before accessing it
+
                     string style = row.Cells[0].Value?.ToString() ?? "";
                     string customer = row.Cells[1].Value?.ToString() ?? "";
                     string f1 = row.Cells[2].Value?.ToString() ?? "";
@@ -122,7 +142,7 @@ namespace Costing
                     string f11 = row.Cells[12].Value?.ToString() ?? "";
                     string f12 = row.Cells[13].Value?.ToString() ?? "";
 
-                    // Set parameter values
+
                     insertCommand.Parameters["@Style"].Value = style;
                     insertCommand.Parameters["@Customer"].Value = customer;
                     insertCommand.Parameters["@F1"].Value = f1;
@@ -138,14 +158,13 @@ namespace Costing
                     insertCommand.Parameters["@F11"].Value = f11;
                     insertCommand.Parameters["@F12"].Value = f12;
 
-                    // Execute the command
+
                     try
                     {
                         insertCommand.ExecuteNonQuery();
                     }
                     catch (Exception ex)
                     {
-                        // If an error occurs during insertion, set success to false and break the loop
                         success = false;
                         MessageBox.Show("Error: " + ex.Message);
                         break;
@@ -162,6 +181,50 @@ namespace Costing
                     MessageBox.Show("Some data could not be inserted. Please check and try again.");
                 }
             }
+        }
+
+        private void dgvColumns_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right && e.RowIndex != -1) // Right-click on a row
+            {
+                dgvColumns.ClearSelection();
+                dgvColumns.Rows[e.RowIndex].Selected = true;
+
+                ContextMenuStrip menu = new ContextMenuStrip();
+                ToolStripMenuItem addItem = new ToolStripMenuItem("Insert Row Above");
+                ToolStripMenuItem deleteItem = new ToolStripMenuItem("Delete Row");
+                addItem.Click += InsertRow_Click;
+                deleteItem.Click += DeleteRow_Click;
+                menu.Items.Add(addItem);
+                menu.Items.Add(deleteItem);
+
+                menu.Show(Cursor.Position);
+            }
+        }
+
+        private void InsertRow_Click(object sender, EventArgs e)
+        {
+            int rowIndex = dgvColumns.SelectedRows[0].Index;
+            dgvColumns.Rows.Insert(rowIndex, new DataGridViewRow());
+        }
+
+        private void DeleteRow_Click(object sender, EventArgs e)
+        {
+            if (dgvColumns.SelectedRows.Count > 0)
+            {
+                if (dgvColumns.SelectedRows[0].IsNewRow)
+                {
+
+                    return;
+                }
+
+                dgvColumns.Rows.RemoveAt(dgvColumns.SelectedRows[0].Index);
+            }
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            dgvColumns.Rows.Clear();
         }
 
         private void cboStyle_SelectedIndexChanged(object sender, EventArgs e)
@@ -191,7 +254,7 @@ namespace Costing
                     cboStyle.Items.Clear();
                     while (reader.Read())
                     {
-                        cboStyle.Items.Add(reader.GetString(2));
+                        cboStyle.Items.Add(reader.GetString(1));
                     }
                     reader.Close();
                 }
@@ -214,7 +277,7 @@ namespace Costing
                     cboCustomer.Items.Clear();
                     while (reader.Read())
                     {
-                        cboCustomer.Items.Add(reader.GetString(1));
+                        cboCustomer.Items.Add(reader.GetString(0));
                     }
                     reader.Close();
                 }
@@ -225,6 +288,89 @@ namespace Costing
             }
         }
 
+        private void dgvColumns_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //if (e.RowIndex != -1 && e.ColumnIndex != -1)
+            //{
+            //    DataGridViewCell clickedCell = dgvColumns.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            //    string cellValue = clickedCell.Value?.ToString(); // Get the value of the clicked cell
+            //    if (cellValue != null)
+            //    {
+            //        textBox1.Text = cellValue; // Display the cell value in a TextBox
+            //    }
+            //}
 
+            if (dgvColumns != null && textBox1 != null) // Check if dgvColumns and textBox1 are not null
+            {
+                if (e.RowIndex != -1 && e.ColumnIndex != -1)
+                {
+                    // Check if the clicked cell is within the bounds of the DataGridView
+                    if (e.RowIndex < dgvColumns.Rows.Count && e.ColumnIndex < dgvColumns.Columns.Count)
+                    {
+                        // หาชื่อของคอลัมน์ที่ถูกคลิก
+                        string columnName = dgvColumns.Columns[e.ColumnIndex].HeaderText;
+
+                        // หาค่าที่ถูกคลิก
+                        string cellValue = dgvColumns.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
+
+                        // Get the row number
+                        int rowNumber = e.RowIndex + 1;
+
+                        // แสดงชื่อและค่าที่ถูกคลิกใน TextBox
+                        textBox1.Text = "Row Number: " + rowNumber + ", Column Name: " + columnName + ", Cell Value: " + cellValue;
+                    }
+                }
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            //string formula = textBox1.Text.Trim(); // รับสูตรจาก TextBox
+
+            //if (!string.IsNullOrEmpty(formula))
+            //{
+            //    try
+            //    {
+            //        // ดึงเซลล์ที่เลือกใน DataGridView
+            //        DataGridViewCell selectedCell = dgvColumns.CurrentCell;
+
+            //        // ตรวจสอบว่ามีเซลล์ที่เลือกหรือไม่
+            //        if (selectedCell != null)
+            //        {
+            //            DataTable table = new DataTable();
+            //            // คำนวณผลลัพธ์ของสูตร
+            //            object result = table.Compute(formula, "");
+
+            //            // แสดงผลลัพธ์ในเซลล์ที่เลือก
+            //            selectedCell.Value = result.ToString();
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("Error: " + ex.Message);
+            //    }
+            //}
+
+
+        }
+
+        private void dgvColumns_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            string rowNumber = (e.RowIndex + 1).ToString();
+
+            // Create a rectangle to position the row number
+            Rectangle rowBounds = new Rectangle(e.RowBounds.Location.X,
+                                                e.RowBounds.Location.Y,
+                                                dgvColumns.RowHeadersWidth - 4,
+                                                e.RowBounds.Height);
+
+            // Center the row number vertically
+            TextRenderer.DrawText(e.Graphics,
+                                rowNumber,
+                                dgvColumns.RowHeadersDefaultCellStyle.Font,
+                                rowBounds,
+                                dgvColumns.RowHeadersDefaultCellStyle.ForeColor,
+                                TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
+        }
     }
 }
