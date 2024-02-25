@@ -1,0 +1,10 @@
+E:\Work\Project C#\Costing\bin\Debug\Costing.exe.config
+E:\Work\Project C#\Costing\bin\Debug\Costing.exe
+E:\Work\Project C#\Costing\bin\Debug\Costing.pdb
+E:\Work\Project C#\Costing\obj\Debug\Costing.csproj.AssemblyReference.cache
+E:\Work\Project C#\Costing\obj\Debug\Costing.Form1.resources
+E:\Work\Project C#\Costing\obj\Debug\Costing.Properties.Resources.resources
+E:\Work\Project C#\Costing\obj\Debug\Costing.csproj.GenerateResource.cache
+E:\Work\Project C#\Costing\obj\Debug\Costing.csproj.CoreCompileInputs.cache
+E:\Work\Project C#\Costing\obj\Debug\Costing.exe
+E:\Work\Project C#\Costing\obj\Debug\Costing.pdb
