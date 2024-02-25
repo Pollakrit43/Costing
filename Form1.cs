@@ -11,8 +11,7 @@ namespace Costing
         private const string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=dbdemo;Integrated Security=True";
         private string selectedStyle;
         private string selectedCustomer;
-
-
+        private string selectedType;
 
         public Form1()
         {
@@ -39,44 +38,102 @@ namespace Costing
             // Handle the RowPostPaint event to draw row numbers
             dgvColumns.RowPostPaint += dgvColumns_RowPostPaint;
 
+            dgvColumns.CellValueChanged += dgvColumns_CellValueChanged;
+
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "DATED", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "STYLE", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "CUSTOMER BRAND", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "COUNTRY OF ORIGIN", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "FACTORY", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "DESCRIPTION", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "SEASON", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-
-            DataGridViewRow fabricRow1 = new DataGridViewRow();
-            fabricRow1.CreateCells(dgvColumns, selectedStyle, selectedCustomer, "FABRIC", "CODE", "", "", "", "", "", "", "UNIT", "CIF BKK", "CONSUMPTION/PC", "AMOUNT/USD");
-
-
-            for (int i = 0; i < fabricRow1.Cells.Count; i++)
+            // Check if the selected style and customer are not empty
+            if (!string.IsNullOrEmpty(selectedStyle) && !string.IsNullOrEmpty(selectedCustomer) && !string.IsNullOrEmpty(tb2.Text))
             {
-                fabricRow1.Cells[i].ReadOnly = true;
+                dgvColumns.Rows.Add(selectedType, selectedStyle, selectedCustomer, "DATED", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "STYLE", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "CUSTOMER BRAND", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "COUNTRY OF ORIGIN", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "FACTORY", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "DESCRIPTION", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "SEASON", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+
+                DataGridViewRow fabricRow1 = new DataGridViewRow();
+                fabricRow1.CreateCells(dgvColumns, selectedType,selectedStyle, selectedCustomer, "FABRIC", "CODE", "", "", "", "", "", "", "UNIT", "CIF BKK", "CONSUMPTION/PC", "AMOUNT/USD");
+
+                for (int i = 0; i < fabricRow1.Cells.Count; i++)
+                {
+                    fabricRow1.Cells[i].ReadOnly = true;
+                }
+                dgvColumns.Rows.Add(fabricRow1);
+
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "A) BODY", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "B) POCKET LINING", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "C) NECK BINDING", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+
+                DataGridViewRow fabricRow2 = new DataGridViewRow();
+                fabricRow2.CreateCells(dgvColumns, selectedType, selectedStyle, selectedCustomer, "TRIMS", "CODE", "PLACEMENT", "", "", "", "", "", "", "UNIT/PC", "QUANTITY", "AMOUNT/USD");
+
+                for (int i = 0; i < fabricRow2.Cells.Count; i++)
+                {
+                    fabricRow2.Cells[i].ReadOnly = true;
+                }
+
+                dgvColumns.Rows.Add(fabricRow2);
+
+
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "SCREEN PRINT", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "LOGO HEAT TRANSFER", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, "THREAD", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+
+
+                DataGridViewRow fabricRow3 = new DataGridViewRow();
+                fabricRow3.CreateCells(dgvColumns, selectedType,selectedStyle, selectedCustomer, "LABELLING", "", "", "", "", "", "", "", "", "UNIT/PC", "QUANTITY", "AMOUNT/USD");
+
+                for (int i = 0; i < fabricRow3.Cells.Count; i++)
+                {
+                    fabricRow3.Cells[i].ReadOnly = true;
+                }
+
+                dgvColumns.Rows.Add(fabricRow3);
+
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+
+
+                DataGridViewRow fabricRow4 = new DataGridViewRow();
+                fabricRow4.CreateCells(dgvColumns, selectedType, selectedStyle, selectedCustomer, "PACKING & FINISHING", "", "", "", "", "", "", "", "", "UNIT/PC", "QUANTITY", "AMOUNT/USD");
+
+                for (int i = 0; i < fabricRow4.Cells.Count; i++)
+                {
+                    fabricRow4.Cells[i].ReadOnly = true;
+                }
+
+                dgvColumns.Rows.Add(fabricRow4);
+
+
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
+                dgvColumns.Rows.Add(selectedType,selectedStyle, selectedCustomer, " ", " ", " ", " ", " ", " ", "Handling Charge", " ", " ", " ", " ", " ", " ", " ");
+
+                DataGridViewRow fabricRow5 = new DataGridViewRow();
+                fabricRow5.CreateCells(dgvColumns, selectedType, selectedStyle, selectedCustomer, "TOTAL MATERIAL COST", "", "", "", "", "", "", "", "", "", "", "");
+
+                for (int i = 0; i < fabricRow5.Cells.Count; i++)
+                {
+                    fabricRow5.Cells[i].ReadOnly = true;
+                }
+
+                dgvColumns.Rows.Add(fabricRow5);
+
             }
-            dgvColumns.Rows.Add(fabricRow1);
-
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "A) BODY", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "B) POCKET LINING", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-            dgvColumns.Rows.Add(selectedStyle, selectedCustomer, "C) NECK BINDING", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ");
-
-
-
-            DataGridViewRow fabricRow2 = new DataGridViewRow();
-            fabricRow2.CreateCells(dgvColumns, selectedStyle, selectedCustomer, "TRIMS", "CODE", "PLACEMENT", "", "", "", "", "", "", "UNIT/PC", "QUANTITY", "AMOUNT/USD");
-
-
-            for (int i = 0; i < fabricRow2.Cells.Count; i++)
+            else
             {
-                fabricRow2.Cells[i].ReadOnly = true;
+                MessageBox.Show("Please select a style, customer, and enter a value in the textbox.");
             }
-
-            dgvColumns.Rows.Add(fabricRow2);
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -98,13 +155,14 @@ namespace Costing
 
                 // Create a SQL command to insert data
                 string insertQuery = @"
-            INSERT INTO TestTableExcel ([Row], Style, Customer, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12)
-            VALUES (@RowValue, @Style, @Customer, @F1, @F2, @F3, @F4, @F5, @F6, @F7, @F8, @F9, @F10, @F11, @F12);";
+            INSERT INTO TestTableExcel ([Row],Type, Style, Customer, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12)
+            VALUES (@RowValue,@Type, @Style, @Customer, @F1, @F2, @F3, @F4, @F5, @F6, @F7, @F8, @F9, @F10, @F11, @F12);";
 
                 SqlCommand insertCommand = new SqlCommand(insertQuery, connection);
 
 
                 insertCommand.Parameters.Add("@RowValue", SqlDbType.Int).Value = newRowValue;
+                insertCommand.Parameters.Add("@Type", SqlDbType.VarChar);
                 insertCommand.Parameters.Add("@Style", SqlDbType.VarChar);
                 insertCommand.Parameters.Add("@Customer", SqlDbType.VarChar);
                 insertCommand.Parameters.Add("@F1", SqlDbType.VarChar);
@@ -126,23 +184,24 @@ namespace Costing
 
                 foreach (DataGridViewRow row in dgvColumns.Rows)
                 {
+                    string type = row.Cells[0].Value?.ToString() ?? "";
+                    string style = row.Cells[1].Value?.ToString() ?? "";
+                    string customer = row.Cells[2].Value?.ToString() ?? "";
+                    string f1 = row.Cells[3].Value?.ToString() ?? "";
+                    string f2 = row.Cells[4].Value?.ToString() ?? "";
+                    string f3 = row.Cells[5].Value?.ToString() ?? "";
+                    string f4 = row.Cells[6].Value?.ToString() ?? "";
+                    string f5 = row.Cells[7].Value?.ToString() ?? "";
+                    string f6 = row.Cells[8].Value?.ToString() ?? "";
+                    string f7 = row.Cells[9].Value?.ToString() ?? "";
+                    string f8 = row.Cells[10].Value?.ToString() ?? "";
+                    string f9 = row.Cells[11].Value?.ToString() ?? "";
+                    string f10 = row.Cells[12].Value?.ToString() ?? "";
+                    string f11 = row.Cells[13].Value?.ToString() ?? "";
+                    string f12 = row.Cells[14].Value?.ToString() ?? "";
 
-                    string style = row.Cells[0].Value?.ToString() ?? "";
-                    string customer = row.Cells[1].Value?.ToString() ?? "";
-                    string f1 = row.Cells[2].Value?.ToString() ?? "";
-                    string f2 = row.Cells[3].Value?.ToString() ?? "";
-                    string f3 = row.Cells[4].Value?.ToString() ?? "";
-                    string f4 = row.Cells[5].Value?.ToString() ?? "";
-                    string f5 = row.Cells[6].Value?.ToString() ?? "";
-                    string f6 = row.Cells[7].Value?.ToString() ?? "";
-                    string f7 = row.Cells[8].Value?.ToString() ?? "";
-                    string f8 = row.Cells[9].Value?.ToString() ?? "";
-                    string f9 = row.Cells[10].Value?.ToString() ?? "";
-                    string f10 = row.Cells[11].Value?.ToString() ?? "";
-                    string f11 = row.Cells[12].Value?.ToString() ?? "";
-                    string f12 = row.Cells[13].Value?.ToString() ?? "";
 
-
+                    insertCommand.Parameters["@Type"].Value = type;
                     insertCommand.Parameters["@Style"].Value = style;
                     insertCommand.Parameters["@Customer"].Value = customer;
                     insertCommand.Parameters["@F1"].Value = f1;
@@ -191,21 +250,30 @@ namespace Costing
                 dgvColumns.Rows[e.RowIndex].Selected = true;
 
                 ContextMenuStrip menu = new ContextMenuStrip();
-                ToolStripMenuItem addItem = new ToolStripMenuItem("Insert Row Above");
+                ToolStripMenuItem addItemAbove = new ToolStripMenuItem("Insert Row Above");
+                ToolStripMenuItem addItemBelow = new ToolStripMenuItem("Insert Row Below");
                 ToolStripMenuItem deleteItem = new ToolStripMenuItem("Delete Row");
-                addItem.Click += InsertRow_Click;
+                addItemAbove.Click += InsertRowAbove_Click;
+                addItemBelow.Click += InsertRowBelow_Click;
                 deleteItem.Click += DeleteRow_Click;
-                menu.Items.Add(addItem);
+                menu.Items.Add(addItemAbove);
+                menu.Items.Add(addItemBelow);
                 menu.Items.Add(deleteItem);
 
                 menu.Show(Cursor.Position);
             }
         }
 
-        private void InsertRow_Click(object sender, EventArgs e)
+        private void InsertRowAbove_Click(object sender, EventArgs e)
         {
             int rowIndex = dgvColumns.SelectedRows[0].Index;
             dgvColumns.Rows.Insert(rowIndex, new DataGridViewRow());
+        }
+
+        private void InsertRowBelow_Click(object sender, EventArgs e)
+        {
+            int rowIndex = dgvColumns.SelectedRows[0].Index;
+            dgvColumns.Rows.Insert(rowIndex + 1, new DataGridViewRow());
         }
 
         private void DeleteRow_Click(object sender, EventArgs e)
@@ -214,7 +282,6 @@ namespace Costing
             {
                 if (dgvColumns.SelectedRows[0].IsNewRow)
                 {
-
                     return;
                 }
 
@@ -225,6 +292,7 @@ namespace Costing
         private void btnReset_Click(object sender, EventArgs e)
         {
             dgvColumns.Rows.Clear();
+            textBox1.Clear();
         }
 
         private void cboStyle_SelectedIndexChanged(object sender, EventArgs e)
@@ -240,6 +308,10 @@ namespace Costing
             //MessageBox.Show("Selected Item: " + selectedCustomer);
         }
 
+        private void cboType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedType = cboType.SelectedItem.ToString();
+        }
 
         private void PopulateComboBox()
         {
@@ -286,6 +358,28 @@ namespace Costing
             {
                 MessageBox.Show("Error: " + ex.Message);
             }
+
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    string query = "SELECT * FROM ORDERS";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    cboType.Items.Clear();
+                    while (reader.Read())
+                    {
+                        cboType.Items.Add(reader.GetString(5));
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
         private void dgvColumns_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -317,7 +411,7 @@ namespace Costing
                         int rowNumber = e.RowIndex + 1;
 
                         // แสดงชื่อและค่าที่ถูกคลิกใน TextBox
-                        textBox1.Text = "Row Number: " + rowNumber + ", Column Name: " + columnName + ", Cell Value: " + cellValue;
+                        textBox1.Text = rowNumber + "-" + columnName + " Cell Value: " + cellValue;
                     }
                 }
             }
@@ -372,5 +466,94 @@ namespace Costing
                                 dgvColumns.RowHeadersDefaultCellStyle.ForeColor,
                                 TextFormatFlags.VerticalCenter | TextFormatFlags.Right);
         }
+
+        private void dgvColumns_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check if the changed cell is in Row 3
+            //if (e.RowIndex == 2)
+            //{
+            //    decimal sum = 1; // Initialize sum to 1 instead of 0
+
+            //    // Loop through each cell in the row
+            //    for (int columnIndex = 0; columnIndex < dgvColumns.Columns.Count; columnIndex++)
+            //    {
+            //        // Check if the current cell is not in F12 column (index 11)
+            //        if (columnIndex != 13)
+            //        {
+            //            // Get the value from the cell
+            //            string cellValue = dgvColumns.Rows[e.RowIndex].Cells[columnIndex].Value?.ToString();
+
+            //            if (!string.IsNullOrEmpty(cellValue) && decimal.TryParse(cellValue, out decimal cellDecimalValue))
+            //            {
+            //                // Multiply the sum by the cell value
+            //                sum *= cellDecimalValue;
+            //            }
+            //        }
+            //    }
+
+            //    // Multiply the accumulated sum by 1.05
+            //    sum *= 1.05m;
+
+            //    // Update the value in F12 cell (index 11) with the sum
+            //    dgvColumns.Rows[e.RowIndex].Cells[13].Value = Math.Round(sum, 4).ToString("0.0000");
+            //}
+        }
+
+        private void dgvColumns_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            // Check if the edited cell is in columns "F10" or "F11"
+            if (e.ColumnIndex == 11 || e.ColumnIndex == 12)
+            {
+                // Get the value from tb2 textbox
+                if (double.TryParse(tb2.Text, out double tb2Value))
+                {
+                    foreach (DataGridViewRow row in dgvColumns.Rows)
+                    {
+                        // Get the values from cells "F10" and "F11" of the current row
+                        string f10Value = row.Cells["F10"].Value?.ToString();
+                        string f11Value = row.Cells["F11"].Value?.ToString();
+
+                        // Check if both values are not null or empty
+                        if (!string.IsNullOrEmpty(f10Value) && !string.IsNullOrEmpty(f11Value))
+                        {
+                            // Parse the values to doubles
+                            if (double.TryParse(f10Value, out double f10) && double.TryParse(f11Value, out double f11))
+                            {
+                                // Calculate the value for "F12" cell with a 5% increment
+                                double result = f10 * f11 * tb2Value;
+
+                                // Update the value in the "F12" cell
+                                row.Cells["F12"].Value = result.ToString("0.0000");
+                            }
+                            else
+                            {
+                                // Handle invalid input in F10 or F11.
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Handle invalid input in tb2.
+                }
+            }
+        }
+
+        private void tb2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+       (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
+        }
+
+       
     }
 }
